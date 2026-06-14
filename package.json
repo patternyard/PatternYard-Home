@@ -8,6 +8,8 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
+		"postinstall": "node scripts/fetch-backend.mjs",
+		"backend": "node scripts/fetch-backend.mjs",
         "indexl10n": "node scripts/programatic-langs.js && node scripts/translation-index.js"
 	},
 	"dependencies": {

@@ -29,3 +29,6 @@ scripts/sheet-token.js
 
 # other
 .dev/*
+
+# backend clone fetched by scripts/fetch-backend.mjs (optional dev convenience)
+.backend
