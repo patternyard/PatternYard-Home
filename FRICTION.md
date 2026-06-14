@@ -93,6 +93,33 @@ background servers from a previous turn are gone.
 - Push commits to the remote in the same step you make them; local-only commits
   are not durable across turns.
 
+## 6. Gitignored files (`.env`) don't survive provisioning
+
+**What happened:** After the git reboot, the app rendered but every Studio/editor
+link was broken (`href="undefined/editor.html"`). `PUBLIC_STUDIO_URL` /
+`PUBLIC_API_URL` were missing.
+
+**Root cause:** The frontend reads those via `$env/static/public`. The required
+`.env` is gitignored (correct — it can hold local overrides) and the VM is
+re-provisioned between turns, which wipes it. So it doesn't travel with the
+branch and nothing recreated it. (Note: `.env.development.local`, v0's managed
+mirror of the project env, holds backend *secrets* but not the frontend
+`PUBLIC_*` vars.) In this SvelteKit version, missing public vars don't hard-error
+— they stringify to `"undefined"`, so the breakage is silent.
+
+**Workaround:** `scripts/bootstrap-env.mjs` recreates `.env` from `.env.template`
+on provision (via `postinstall`, never overwriting an existing `.env`, skipped on
+CI/prod). Mirrors the same "fetch/bootstrap on provision" pattern as the backend
+clone.
+
+**Possible fix:** When a project declares required public env vars (or ships a
+`.env.template`), v0 could offer to seed `.env` on provision, or warn that
+gitignored files won't persist across the VM reset.
+
+**General lesson:** After any git reboot, re-audit what was gitignored —
+gitignored working-tree state (`.env`, `.backend/`) must be regenerated on
+provision, not assumed present.
+
 ## Bonus: what PenguinMod *forks* use for a server
 
 Relevant because it informs how this frontend should talk to a backend.
