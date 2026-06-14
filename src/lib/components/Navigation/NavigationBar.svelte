@@ -11,6 +11,18 @@
     const optionThemeToggle = () => {
         $StoreSettings.appTheme = $StoreSettings.appTheme === "light" ? "dark" : "light";
     };
+
+    // The studio links point at an external origin (PUBLIC_STUDIO_URL). When the
+    // app is embedded in an iframe (e.g. the v0 preview), navigating the same
+    // frame to an external site is blocked and surfaces as an error. Detect the
+    // framed case and open the destination in a new tab instead; outside an
+    // iframe (production) we let the normal anchor navigation happen.
+    const externalLinkClick = (event) => {
+        if (typeof window !== "undefined" && window.self !== window.top) {
+            event.preventDefault();
+            window.open(event.currentTarget.href, "_blank", "noopener,noreferrer");
+        }
+    };
 </script>
 
 <div class="navigation-bar">
@@ -42,6 +54,7 @@
         <a
             href={PUBLIC_STUDIO_URL}
             class="navigation-button-link"
+            onclick={externalLinkClick}
             {@attach LocalizedTooltip("navigation.create")}
         >
             <button tabindex="-1">
@@ -56,6 +69,7 @@
         <a
             href={PUBLIC_STUDIO_URL}
             class="navigation-button-link"
+            onclick={externalLinkClick}
             {@attach LocalizedTooltip("messages.title")}
         >
             <button tabindex="-1">
@@ -65,6 +79,7 @@
         <a
             href={PUBLIC_STUDIO_URL}
             class="navigation-button-link"
+            onclick={externalLinkClick}
             {@attach LocalizedTooltip("navigation.mystuff")}
         >
             <button tabindex="-1">
@@ -74,6 +89,7 @@
         <a
             href={PUBLIC_STUDIO_URL}
             class="navigation-button-link"
+            onclick={externalLinkClick}
         >
             <button tabindex="-1">
                 <Icon>admin_panel_settings</Icon>
@@ -84,6 +100,7 @@
         <a
             href={PUBLIC_STUDIO_URL}
             class="navigation-button-link"
+            onclick={externalLinkClick}
             {@attach LocalizedTooltip("navigation.login")}
         >
             <button tabindex="-1">
@@ -96,6 +113,7 @@
         <a
             href={PUBLIC_STUDIO_URL}
             class="navigation-button-link"
+            onclick={externalLinkClick}
             {@attach LocalizedTooltip("navigation.signup")}
         >
             <button tabindex="-1">
