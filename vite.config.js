@@ -13,6 +13,15 @@ export default defineConfig(({ mode }) => {
 	return {
 		plugins: [sveltekit()],
 		server: {
+			// Bind on all interfaces so the v0 preview proxy can reach the dev server.
+			host: true,
+			// Vite 6 rejects requests whose Host header isn't localhost (HTTP 403
+			// "Blocked request. This host is not allowed."). The v0 preview serves
+			// the dev server through a *.vusercontent.net proxy host, so allow it.
+			// Set VITE_ALLOWED_HOSTS (comma-separated) to override locally.
+			allowedHosts: env.VITE_ALLOWED_HOSTS
+				? env.VITE_ALLOWED_HOSTS.split(',').map((h) => h.trim())
+				: ['.vusercontent.net', '.v0.dev', 'localhost'],
 			proxy: {
 				// Forward /api/* to the backend server-side. Because the browser
 				// only ever talks to the dev origin, there is no CORS and cookies
