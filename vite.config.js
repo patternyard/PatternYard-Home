@@ -1,7 +1,14 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig, loadEnv } from 'vite';
+import { ensureEnv } from './scripts/bootstrap-env.mjs';
 
 export default defineConfig(({ mode }) => {
+	// The v0 sandbox wipes the gitignored .env on re-provision, and the managed
+	// dev server runs `vite dev` directly (no npm lifecycle hooks). vite.config
+	// is the one thing that always loads on dev start, so recreate .env here —
+	// before loadEnv — so PUBLIC_* vars resolve and Studio links don't break.
+	ensureEnv();
+
 	const env = loadEnv(mode, process.cwd(), '');
 
 	// Where the /api dev proxy forwards to. Defaults to the deployed backend so
