@@ -107,18 +107,29 @@ mirror of the project env, holds backend *secrets* but not the frontend
 `PUBLIC_*` vars.) In this SvelteKit version, missing public vars don't hard-error
 — they stringify to `"undefined"`, so the breakage is silent.
 
-**Workaround:** `scripts/bootstrap-env.mjs` recreates `.env` from `.env.template`
-on provision (via `postinstall`, never overwriting an existing `.env`, skipped on
-CI/prod). Mirrors the same "fetch/bootstrap on provision" pattern as the backend
-clone.
+**Failed first attempt — important sub-finding:** I first recreated `.env` from a
+`postinstall` hook. It regressed on the very next turn. **npm lifecycle hooks
+(`postinstall`/`prepare`/`predev`) do NOT run on re-provision:** v0 restores
+`node_modules` from a snapshot without re-running `npm install`, and the managed
+dev server launches `node_modules/.bin/vite dev` *directly* (not `npm run dev`),
+so npm never gets a chance to fire hooks.
+
+**Workaround that actually holds:** The one file guaranteed to execute on every
+dev start is `vite.config.js`. So `scripts/bootstrap-env.mjs` exports
+`ensureEnv()` (never-throws, never-overwrites, skipped on CI/prod) and
+`vite.config.js` calls it before `loadEnv()`. Sub-gotcha: a script imported by
+`vite.config.js` must not carry a `#!/usr/bin/env node` shebang — esbuild fails
+to bundle it (`Syntax error "!"`).
 
 **Possible fix:** When a project declares required public env vars (or ships a
-`.env.template`), v0 could offer to seed `.env` on provision, or warn that
-gitignored files won't persist across the VM reset.
+`.env.template`), v0 could seed `.env` on provision, or warn that gitignored
+files won't persist across the VM reset.
 
 **General lesson:** After any git reboot, re-audit what was gitignored —
 gitignored working-tree state (`.env`, `.backend/`) must be regenerated on
-provision, not assumed present.
+provision, not assumed present. And anything that must run **every provision**
+belongs in `vite.config.js` (or the framework's always-loaded config), NOT in
+npm lifecycle scripts.
 
 ## Bonus: what PenguinMod *forks* use for a server
 
