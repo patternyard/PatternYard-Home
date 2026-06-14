@@ -1,1 +1,0 @@
-export { default as component } from "../../../../src/routes/developmentthiswillgetdeleted/testlocalization1/+page.svelte";
