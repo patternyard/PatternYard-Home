@@ -104,12 +104,14 @@ REST API cannot create orgs (only Enterprise can). The user must create it at
 `github.com/account/organizations/new`. Everything after that is scriptable.
 
 ### Decisions made
-- **Org slug: `patternyarn`** (brand = **PatternYarn**). Confirmed available on
-  GitHub (org slug), npm (name + `@patternyarn` scope). `patternyarn.com` is
-  taken (Shopify), but `.app`/`.dev`/`.io` are free. Chosen 2026-06 with Jonas's
-  input — "yarn" maps to his core trait of seeing the threads/connections
-  between "things that are secretly the same" (see `docs/PERSONAS.md`).
-- **Rename repos: YES** — `PenguinMod-*` → `PatternYarn-*` as part of the
+- **Org slug: `patternyard`** (brand = **PatternYard**) — org CREATED 2026-06,
+  `wycats` is sole Owner. Chosen for Jonas: a "yard" is the place you go to
+  build/tinker/show others (the make-and-share playground + his builder/maker
+  identity); "Pattern" = his trait of spotting structure between "things that are
+  secretly the same" (see `docs/PERSONAS.md`).
+  - NOTE: earlier docs said `patternyarn` (yarn); the created org is
+    `patternyard` (yard) and that is the chosen brand of record.
+- **Rename repos: YES** — `PenguinMod-*` → `PatternYard-*` as part of the
   transfer (Phase A). Mapping in §2.
 
 ### Runbook (execute once the org exists; do it in a focused pass)
@@ -158,37 +160,34 @@ REST API cannot create orgs (only Enterprise can). The user must create it at
 
 ---
 
-## 2. Rebrand → **PatternYarn**
+## 2. Rebrand → **PatternYard**
 
-Chosen name: **PatternYarn** (org slug `patternyarn`). Availability verified
-2026-06 (GitHub org + npm free; `.app`/`.dev`/`.io` domains free). Execute
-alongside the org migration.
+Chosen name: **PatternYard** (org slug `patternyard`, org created; `wycats`
+sole Owner). Execute alongside the org migration.
 
 ### Repo rename mapping (Phase A, during transfer)
-`PenguinMod-*` → `PatternYarn-*`, preserving casing pattern. The two lowercase
-repos (`penguinmod.github.io`, `penguinmod-render-fonts`, `penguinmod-svg-renderer`)
-need a decision on the GitHub Pages repo name:
+`PenguinMod-*` → `PatternYard-*`, preserving casing pattern.
 | Current | New |
 |---|---|
-| `penguinmod.github.io` (editor) | `patternyarn-studio` (NOT `.github.io` — we deploy on Vercel, not Pages) |
-| `PenguinMod-HomeNew-9r` (Home) | `PatternYarn-Home` |
-| `PenguinMod-BackendApi` | `PatternYarn-BackendApi` |
-| `PenguinMod-Packager` | `PatternYarn-Packager` |
-| `PenguinMod-Vm` | `PatternYarn-Vm` |
-| `PenguinMod-Blocks` | `PatternYarn-Blocks` |
-| `PenguinMod-Render` | `PatternYarn-Render` |
-| `PenguinMod-Audio` | `PatternYarn-Audio` |
-| `PenguinMod-Paint` | `PatternYarn-Paint` |
-| `PenguinMod-Storage` | `PatternYarn-Storage` |
-| `PenguinMod-Parser` | `PatternYarn-Parser` |
-| `penguinmod-render-fonts` | `patternyarn-render-fonts` |
-| `penguinmod-svg-renderer` | `patternyarn-svg-renderer` |
-| `PenguinMod-MarkDown` | `PatternYarn-MarkDown` |
-| `PenguinMod-MarkDownNew` | `PatternYarn-MarkDownNew` |
-| `PenguinMod-Docs` | `PatternYarn-Docs` |
-| `PenguinMod-ApiModule` | `PatternYarn-ApiModule` |
-| `PenguinMod-SvelteUI` | `PatternYarn-SvelteUI` |
-| `PenguinMod-ExtensionsGallery` | `PatternYarn-ExtensionsGallery` |
+| `penguinmod.github.io` (editor) | `patternyard-studio` (NOT `.github.io` — we deploy on Vercel, not Pages) |
+| `PenguinMod-HomeNew-9r` (Home) | `PatternYard-Home` |
+| `PenguinMod-BackendApi` | `PatternYard-BackendApi` |
+| `PenguinMod-Packager` | `PatternYard-Packager` |
+| `PenguinMod-Vm` | `PatternYard-Vm` |
+| `PenguinMod-Blocks` | `PatternYard-Blocks` |
+| `PenguinMod-Render` | `PatternYard-Render` |
+| `PenguinMod-Audio` | `PatternYard-Audio` |
+| `PenguinMod-Paint` | `PatternYard-Paint` |
+| `PenguinMod-Storage` | `PatternYard-Storage` |
+| `PenguinMod-Parser` | `PatternYard-Parser` |
+| `penguinmod-render-fonts` | `patternyard-render-fonts` |
+| `penguinmod-svg-renderer` | `patternyard-svg-renderer` |
+| `PenguinMod-MarkDown` | `PatternYard-MarkDown` |
+| `PenguinMod-MarkDownNew` | `PatternYard-MarkDownNew` |
+| `PenguinMod-Docs` | `PatternYard-Docs` |
+| `PenguinMod-ApiModule` | `PatternYard-ApiModule` |
+| `PenguinMod-SvelteUI` | `PatternYard-SvelteUI` |
+| `PenguinMod-ExtensionsGallery` | `PatternYard-ExtensionsGallery` |
 
 ### Scope of a rebrand
 - **Org slug + repo names** (`PenguinMod-*` → `<Brand>-*`). Mechanical; leaves
@@ -281,11 +280,10 @@ worth the effort. Process per repo:
 
 ## Sequencing summary
 
-1. **Now:** this plan documented; brand chosen = **PatternYarn** (`patternyarn`). ✅
-2. **User:** create the GitHub org at
-   `github.com/account/organizations/new` with slug **`patternyarn`**.
+1. **Now:** this plan documented; brand chosen = **PatternYard** (`patternyard`). ✅
+2. **User:** GitHub org `patternyard` created (`wycats` sole Owner). ✅
 3. **Focused pass:** execute §1 migration runbook + §2 Phase A (transfer 19
-   repos into `patternyarn`, rename `PenguinMod-*` → `PatternYarn-*` per the §2
+   repos into `patternyard`, rename `PenguinMod-*` → `PatternYard-*` per the §2
    mapping, rewrite git-dep URLs, Vercel relink + re-audit).
 4. **Separate pass:** §2 Phase B product rebrand (Home, then editor).
 5. **Dedicated review:** §3 MistWarp; port content into our galleries.

@@ -1,13 +1,15 @@
 # Who We Are Building For
 
-A persona reference for **PatternYarn** — a kid-friendly, Scratch-like
+A persona reference for **PatternYard** — a kid-friendly, Scratch-like
 "Digital Playground" where children **make and share** projects. Use it to
 keep product decisions anchored to real users and to defend scope: if a feature
 does not serve one of these people, question it.
 
-> **Why "PatternYarn"?** The name was chosen for Jonas: "yarn" is the thread
-> that connects things, echoing his signature trait of finding the patterns
-> between "things that are secretly the same" (see his persona below).
+> **Why "PatternYard"?** Chosen for Jonas. A "yard" is the open place you go to
+> build, tinker, and show others what you made — matching the make-and-share
+> playground this is, and his self-identity as a builder/maker. "Pattern" speaks
+> to his signature trait: spotting the structures and connections between
+> "things that are secretly the same" (see his persona below).
 
 > **Sourcing & freshness.** This document synthesizes two internal sources:
 > a real-child interest profile (notes dated **2025-07**, describing Jonas at
