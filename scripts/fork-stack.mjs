@@ -13,8 +13,45 @@
 import { spawnSync } from 'node:child_process';
 import { FORK_OWNER, UPSTREAM_ORG, WORK_BRANCH, TO_FORK } from './stack-manifest.mjs';
 
+/**
+ * Token selection (empirically determined in the v0 sandbox):
+ * - `gh auth token` yields a 32-char token that CAN create forks. Prefer it.
+ * - git credential / GH_TOKEN often resolve to a 40-char `ghs_` GitHub App
+ *   installation token that is more restricted — it reads fine but returns
+ *   403 "Resource not accessible by integration" on fork. Fallbacks only.
+ * The capable vs restricted token is injected inconsistently per shell
+ * (see v0_memories gh-cli-fix); a 40-char `ghs_` token here means this shell
+ * can't fork — re-run in another shell until a 32-char token appears.
+ */
+function ghAuthToken() {
+	const res = spawnSync('gh', ['auth', 'token'], { encoding: 'utf8' });
+	return res.status === 0 ? (res.stdout || '').trim() : '';
+}
+
+function gitCredentialToken() {
+	const res = spawnSync('git', ['credential', 'fill'], {
+		input: 'protocol=https\nhost=github.com\n\n',
+		encoding: 'utf8',
+	});
+	const m = (res.stdout || '').match(/^password=(.+)$/m);
+	return m ? m[1].trim() : '';
+}
+
+function resolveToken() {
+	return ghAuthToken() || gitCredentialToken() || process.env.GH_TOKEN || '';
+}
+
+const GH_TOKEN = resolveToken();
+if (!GH_TOKEN) {
+	console.error('[fork] could not resolve a GitHub token (GH_TOKEN or git credential). Aborting.');
+	process.exit(1);
+}
+
 function gh(args, { json = false } = {}) {
-	const res = spawnSync('gh', args, { encoding: 'utf8' });
+	const res = spawnSync('gh', args, {
+		encoding: 'utf8',
+		env: { ...process.env, GH_TOKEN },
+	});
 	if (res.status !== 0) {
 		return { ok: false, err: (res.stderr || '').trim(), out: (res.stdout || '').trim() };
 	}
