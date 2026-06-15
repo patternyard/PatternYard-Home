@@ -13,9 +13,9 @@
         "indexl10n": "node scripts/programatic-langs.js && node scripts/translation-index.js"
 	},
 	"dependencies": {
-		"penguinmod": "github:wycats/PenguinMod-ApiModule#wycats-main",
-		"PenguinMod-MarkDown": "github:wycats/PenguinMod-MarkDownNew#wycats-main",
-		"PenguinMod-SvelteUI": "github:wycats/PenguinMod-SvelteUI#wycats-main"
+		"penguinmod": "github:patternyard/PatternYard-ApiModule#wycats-main",
+		"PenguinMod-MarkDown": "github:patternyard/PatternYard-MarkDownNew#wycats-main",
+		"PenguinMod-SvelteUI": "github:patternyard/PatternYard-SvelteUI#wycats-main"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-vercel": "^5.10.2",
