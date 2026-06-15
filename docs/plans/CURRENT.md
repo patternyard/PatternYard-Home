@@ -6,6 +6,16 @@ things the original plan deferred: moving the stack into a dedicated GitHub org,
 rebranding away from `PenguinMod-*`, and a repeatable process for pulling
 valuable changes from upstreams over time.
 
+> **STATUS 2026-06: ORG MIGRATION + REBRAND COMPLETE.** All 19 repos transferred
+> to `patternyard` and renamed `PenguinMod-*` → `PatternYard-*` (repoIds
+> preserved; old paths redirect). All git-deps repointed wycats → patternyard
+> across studio/packager/engines + Home; lockfiles regenerated (zero stale
+> wycats/PenguinMod refs). All 5 Vercel projects auto-followed by repoId and
+> deploy GREEN from patternyard (studio/packager/Home 200, backend 307 redirect
+> as expected). This chat's git remote repointed to
+> `patternyard/PatternYard-Home`. Remaining: §3 upstream-merge process is
+> ongoing/as-needed; §0b runtime-CDN gaps still open (see backend memory).
+
 ---
 
 ## 0. Current state (what's already done)
