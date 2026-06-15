@@ -56,6 +56,47 @@ build-time or runtime dependency on `PenguinMod/*`**. Verified 2026-06.
 
 ---
 
+## 0b. Remaining self-hosting gaps (the work NOT yet done)
+
+The 19 repos are forked and the 4 deployable APPS are live, but
+self-hosting is **not** complete. What's left, by category:
+
+**A. Runtime CDN/content services still pointing at upstream.**
+The editor's `src/lib/pm-config.js` defines 5 roots. Only `PM_API_ROOT`
+(backend) was repointed. These 4 still default to the upstream PenguinMod CDN
+and are **neither forked nor deployed** — they are separately-hosted services,
+not repos in our stack:
+| Root | Upstream default | Status |
+| --- | --- | --- |
+| `PM_EXTENSIONS_ROOT` | `extensions.penguinmod.com` | UPSTREAM — not forked/hosted |
+| `PM_LIBRARY_ROOT` | `library.penguinmod.com` (sprites/sounds/costumes) | UPSTREAM — not forked/hosted |
+| `PM_ASSET_CDN_ROOT` | `asset-cdn.penguinmod.com` | UPSTREAM — not forked/hosted |
+| `PM_DOCS_ROOT` | `docs.penguinmod.com` | UPSTREAM — not forked/hosted |
+Decide per-service: (a) leave pointing upstream (acceptable for read-only
+content), (b) proxy through our infra, or (c) stand up our own hosted copy.
+Until then the editor still *reads* from PenguinMod for assets/extensions/docs.
+
+**B. Verification debt (claims in §0 invariants that need re-confirming).**
+- **Studio project has only `NODE_OPTIONS` set — NO `PM_API_ROOT` env var.**
+  The backend repoint was a *build-time bake* (webpack DefinePlugin), not a
+  runtime env. Re-verify the deployed editor actually calls
+  `penguinmod-backend.vercel.app` (sample ALL `js/*.js` chunks, not just a few)
+  and that no live (non-commented) `projects.penguinmod.com` call remains.
+- **Home project carries leftover backend-artifact env vars** (`MONGODB_URI`,
+  `REDIS_URL`, `BLOB_READ_WRITE_TOKEN`, `ViewingEnabled`, `UploadingEnabled`,
+  `ApiURL`/`StudioURL`/`HomeURL`, ~30 flags) from the old Next.js unified
+  artifact. The SvelteKit Home uses `PUBLIC_STUDIO_URL`/`PUBLIC_API_URL`.
+  Audit which are actually consumed and prune the dead ones.
+
+**C. Backend data state.** Backend DB is fresh/empty; `viewingEnabled` flag is
+OFF (project loads return 503 "Viewing is disabled" until flipped in the DB).
+
+**D. Engine/library repos correctly need NO Vercel deploy** — they are
+build-time npm git-deps consumed by the 4 apps. Forking + git-dep rewiring is
+the whole job for those; there is nothing to "deploy."
+
+---
+
 ## 1. GitHub org migration
 
 **Hard constraint:** creating a free GitHub org is a **UI-only action** — the
