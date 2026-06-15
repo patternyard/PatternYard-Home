@@ -103,9 +103,14 @@ the whole job for those; there is nothing to "deploy."
 REST API cannot create orgs (only Enterprise can). The user must create it at
 `github.com/account/organizations/new`. Everything after that is scriptable.
 
-### Decisions needed before executing
-- **Org slug** (ties into the rebrand — see §2).
-- **Whether to rename repos** during the transfer or keep `PenguinMod-*` names.
+### Decisions made
+- **Org slug: `patternyarn`** (brand = **PatternYarn**). Confirmed available on
+  GitHub (org slug), npm (name + `@patternyarn` scope). `patternyarn.com` is
+  taken (Shopify), but `.app`/`.dev`/`.io` are free. Chosen 2026-06 with Jonas's
+  input — "yarn" maps to his core trait of seeing the threads/connections
+  between "things that are secretly the same" (see `docs/PERSONAS.md`).
+- **Rename repos: YES** — `PenguinMod-*` → `PatternYarn-*` as part of the
+  transfer (Phase A). Mapping in §2.
 
 ### Runbook (execute once the org exists; do it in a focused pass)
 
@@ -153,9 +158,37 @@ REST API cannot create orgs (only Enterprise can). The user must create it at
 
 ---
 
-## 2. Rebrand
+## 2. Rebrand → **PatternYarn**
 
-The user wants to plan the rebrand now (execute alongside the org migration).
+Chosen name: **PatternYarn** (org slug `patternyarn`). Availability verified
+2026-06 (GitHub org + npm free; `.app`/`.dev`/`.io` domains free). Execute
+alongside the org migration.
+
+### Repo rename mapping (Phase A, during transfer)
+`PenguinMod-*` → `PatternYarn-*`, preserving casing pattern. The two lowercase
+repos (`penguinmod.github.io`, `penguinmod-render-fonts`, `penguinmod-svg-renderer`)
+need a decision on the GitHub Pages repo name:
+| Current | New |
+|---|---|
+| `penguinmod.github.io` (editor) | `patternyarn-studio` (NOT `.github.io` — we deploy on Vercel, not Pages) |
+| `PenguinMod-HomeNew-9r` (Home) | `PatternYarn-Home` |
+| `PenguinMod-BackendApi` | `PatternYarn-BackendApi` |
+| `PenguinMod-Packager` | `PatternYarn-Packager` |
+| `PenguinMod-Vm` | `PatternYarn-Vm` |
+| `PenguinMod-Blocks` | `PatternYarn-Blocks` |
+| `PenguinMod-Render` | `PatternYarn-Render` |
+| `PenguinMod-Audio` | `PatternYarn-Audio` |
+| `PenguinMod-Paint` | `PatternYarn-Paint` |
+| `PenguinMod-Storage` | `PatternYarn-Storage` |
+| `PenguinMod-Parser` | `PatternYarn-Parser` |
+| `penguinmod-render-fonts` | `patternyarn-render-fonts` |
+| `penguinmod-svg-renderer` | `patternyarn-svg-renderer` |
+| `PenguinMod-MarkDown` | `PatternYarn-MarkDown` |
+| `PenguinMod-MarkDownNew` | `PatternYarn-MarkDownNew` |
+| `PenguinMod-Docs` | `PatternYarn-Docs` |
+| `PenguinMod-ApiModule` | `PatternYarn-ApiModule` |
+| `PenguinMod-SvelteUI` | `PatternYarn-SvelteUI` |
+| `PenguinMod-ExtensionsGallery` | `PatternYarn-ExtensionsGallery` |
 
 ### Scope of a rebrand
 - **Org slug + repo names** (`PenguinMod-*` → `<Brand>-*`). Mechanical; leaves
@@ -248,10 +281,12 @@ worth the effort. Process per repo:
 
 ## Sequencing summary
 
-1. **Now:** this plan documented. ✅
-2. **User:** create the GitHub org (UI) + decide brand name.
-3. **Focused pass:** execute §1 migration runbook + §2 Phase A (repo renames +
-   URL rewrite + Vercel relink + re-audit).
+1. **Now:** this plan documented; brand chosen = **PatternYarn** (`patternyarn`). ✅
+2. **User:** create the GitHub org at
+   `github.com/account/organizations/new` with slug **`patternyarn`**.
+3. **Focused pass:** execute §1 migration runbook + §2 Phase A (transfer 19
+   repos into `patternyarn`, rename `PenguinMod-*` → `PatternYarn-*` per the §2
+   mapping, rewrite git-dep URLs, Vercel relink + re-audit).
 4. **Separate pass:** §2 Phase B product rebrand (Home, then editor).
 5. **Dedicated review:** §3 MistWarp; port content into our galleries.
 6. **Ongoing:** §4 maintenance cadence.
