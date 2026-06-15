@@ -18,7 +18,7 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { UPSTREAM_ORG, FORK_OWNER, WORK_BRANCH } from './stack-manifest.mjs';
+import { UPSTREAM_ORG, FORK_OWNER, WORK_BRANCH, FORK_NAME_BY_UPSTREAM } from './stack-manifest.mjs';
 
 // Rewrite a single dependency specifier. Returns the (possibly) rewritten value.
 // Only specifiers that reference the upstream org are touched.
@@ -33,9 +33,12 @@ export function rewriteSpecifier(value) {
 	);
 	const m = value.match(re);
 	if (!m) return value;
-	const repo = m[2];
+	const upstreamRepo = m[2];
+	// Translate the upstream repo name to our renamed fork (forks were renamed,
+	// e.g. PenguinMod-Vm -> PatternYard-Vm); fall back to identity if unmapped.
+	const forkRepo = FORK_NAME_BY_UPSTREAM.get(upstreamRepo.toLowerCase()) || upstreamRepo;
 	// Normalize to github: shorthand pinned at our work branch.
-	return `github:${FORK_OWNER}/${repo}#${WORK_BRANCH}`;
+	return `github:${FORK_OWNER}/${forkRepo}#${WORK_BRANCH}`;
 }
 
 // Recursively rewrite every string value in a (possibly nested) dependency
