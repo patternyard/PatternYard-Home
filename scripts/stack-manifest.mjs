@@ -39,6 +39,10 @@ export const STACK = [
 	// Content / docs rendering used by the editor.
 	{ repo: 'PenguinMod-MarkDown', role: 'content', base: 'master' },
 
+	// Backend services the editor calls. Forkable + self-hostable.
+	{ repo: 'PenguinMod-ExtensionsGallery', role: 'service', base: 'main' },
+	{ repo: 'PenguinMod-Docs', role: 'service', base: 'main' },
+
 	// Already forked into wycats.
 	{ repo: 'PenguinMod-HomeNew', role: 'home', base: 'main', done: true },
 	{ repo: 'PenguinMod-BackendApi', role: 'backend', base: 'main', done: true },
