@@ -143,6 +143,34 @@ REST API cannot create orgs (only Enterprise can). The user must create it at
 6. **Re-verify env vars** on every project (they're per-project; transfers don't
    move them). Especially `PUBLIC_STUDIO_URL`, `PUBLIC_API_URL`,
    `NODE_OPTIONS`, backend secrets.
+
+### Verified execution data (2026-06 — durable; survives VM reset)
+
+**HARD GATE — Vercel GitHub app must be installed on `patternyard` FIRST.**
+Vercel's visible git namespaces are exactly: `wycats`, `design-axioms`,
+`starbeamjs`, `vercel`, `vercel-labs` — **`patternyard` is NOT among them.**
+Installing a GitHub App on an org is UI-only (no API). Until the user installs
+the Vercel app on `patternyard` (https://github.com/apps/vercel/installations/new
+→ pick patternyard → All repositories), transferring deployed repos breaks
+their builds. Same applies to the v0 app before re-pointing the chat.
+
+**Vercel binds by stable GitHub `repoId` (verified: Vercel repoId == GitHub repo
+id exactly).** So transfer+rename preserves the binding by ID once the app is
+installed; relink/PATCH only if Vercel doesn't auto-follow.
+
+| Vercel project | projId | repoId | prod branch | notes |
+|---|---|---|---|---|
+| penguinmod-frontend (Home) | prj_R737nT8qH0EIZ8I0RrT57i0UQYxq | 1269440742 | main | THIS chat's repo — transfer LAST |
+| penguinmod-studio (editor) | prj_ORYYVAiXDxbVbIOo1wMmyYJhWgLJ | 1269632631 | wycats-main | |
+| penguinmod-packager | prj_XzsRhyy1mpi1s4UDyJ1SlRKrQCAq | 1269787561 | wycats-main | NODE_OPTIONS legacy-provider |
+| penguinmod-backend | prj_EsCTv3vjqDTbmuRoWGl6EjIRriD3 | 1268652949 | main | shares repo w/ pm-verify |
+| pm-verify | prj_ApAS1zo8q5jBRJ9uESiNkmfkayvX | 1268652949 | main | SAME repo as backend — relink both |
+
+**Decisions (2026-06):** Home transferred LAST + immediately re-verify chat
+binding & deploy. After Home moves, re-point the v0 chat's GitHub connection to
+`patternyard/PatternYard-Home` (needs v0 app authorized on org + likely v0-UI
+re-auth). All 19 repos have stable IDs; only Home carries a ruleset (id
+17667330).
 7. **Full re-audit**: re-run the git-dep audit (flag any specifier not matching
    `<ORG>/`), and curl every deployment + the 5 Home→studio links.
 
