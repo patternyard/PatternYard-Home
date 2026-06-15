@@ -1,83 +1,131 @@
 #!/usr/bin/env node
 /**
  * Stage 2: rewrite a fork's package.json so every git dependency that points at
- * the upstream org (PenguinMod) points at our fork owner (wycats) instead. The
- * package *names* (scratch-vm, scratch-render, ...) are untouched — only the
- * git source org changes. The pinned `#<ref>` is preserved.
+ * the upstream org (PenguinMod) points at our fork (wycats) AND at our work
+ * branch (wycats-main) instead of the upstream-pinned ref.
+ *
+ * Why the ref must change too: upstream pins refs like #develop / #master. If
+ * we only swapped the org we'd pull wycats/<repo>#develop — an unmodified
+ * mirror whose OWN package.json still references PenguinMod. The modified
+ * manifests live on wycats-main, so the whole graph must point there.
+ *
+ * The package *names* (scratch-vm, scratch-render, ...) are untouched — only
+ * the git source org and ref change. Repo names are kept as written (GitHub
+ * owner/repo is case-insensitive, so `penguinmod-render` still resolves).
  *
  * Usage:  node scripts/rewrite-deps.mjs [path-to-repo]   (default: cwd)
  *         node scripts/rewrite-deps.mjs --check [path]    (report only, exit 1 if refs remain)
- *
- * Handles both specifier styles:
- *   github:PenguinMod/Repo#ref
- *   git+https://github.com/PenguinMod/Repo(.git)(#ref)
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { UPSTREAM_ORG, FORK_OWNER } from './stack-manifest.mjs';
+import { UPSTREAM_ORG, FORK_OWNER, WORK_BRANCH } from './stack-manifest.mjs';
 
-const args = process.argv.slice(2);
-const checkOnly = args.includes('--check');
-const repoDir = args.find((a) => !a.startsWith('--')) || process.cwd();
-const pkgPath = join(repoDir, 'package.json');
-
-// Match the org inside the common git-dep specifier forms, case-sensitive on
-// the org segment so we only touch PenguinMod-owned references.
-const ghShort = new RegExp(`(github:)${UPSTREAM_ORG}(/)`, 'g');
-const ghUrl = new RegExp(`(github\\.com/)${UPSTREAM_ORG}(/)`, 'g');
-
-function rewriteSpecifier(value) {
+// Rewrite a single dependency specifier. Returns the (possibly) rewritten value.
+// Only specifiers that reference the upstream org are touched.
+export function rewriteSpecifier(value) {
 	if (typeof value !== 'string') return value;
-	return value.replace(ghShort, `$1${FORK_OWNER}$2`).replace(ghUrl, `$1${FORK_OWNER}$2`);
+	// Match all git-dep specifier forms npm understands, then <org>/<repo>,
+	// optional `.git`, optional `#ref`. `git+https://` is listed before the
+	// plain `https://` alternative so the longer prefix wins.
+	const re = new RegExp(
+		`^(github:|git\\+https://github\\.com/|https://github\\.com/|git\\+ssh://git@github\\.com/|git@github\\.com:)${UPSTREAM_ORG}/([^#./]+)(?:\\.git)?(?:#.+)?$`,
+		'i'
+	);
+	const m = value.match(re);
+	if (!m) return value;
+	const repo = m[2];
+	// Normalize to github: shorthand pinned at our work branch.
+	return `github:${FORK_OWNER}/${repo}#${WORK_BRANCH}`;
 }
 
-function rewriteDepBlock(block, changes) {
-	if (!block) return;
-	for (const name of Object.keys(block)) {
-		const next = rewriteSpecifier(block[name]);
-		if (next !== block[name]) {
-			changes.push(`${name}: ${block[name]} -> ${next}`);
-			block[name] = next;
+// Recursively rewrite every string value in a (possibly nested) dependency
+// block — covers npm `overrides` and yarn `resolutions`, which can nest.
+function rewriteBlock(block, path, changes) {
+	if (!block || typeof block !== 'object') return;
+	for (const key of Object.keys(block)) {
+		const val = block[key];
+		if (typeof val === 'string') {
+			const next = rewriteSpecifier(val);
+			if (next !== val) {
+				changes.push(`${path}${key}: ${val} -> ${next}`);
+				block[key] = next;
+			}
+		} else if (val && typeof val === 'object') {
+			rewriteBlock(val, `${path}${key}.`, changes);
 		}
 	}
 }
 
-let raw;
-try {
-	raw = readFileSync(pkgPath, 'utf8');
-} catch {
-	console.log(`[rewrite] no package.json at ${pkgPath} — skipping`);
-	process.exit(0);
-}
-
-const pkg = JSON.parse(raw);
-const changes = [];
-for (const field of ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies']) {
-	rewriteDepBlock(pkg[field], changes);
-}
-
-// Detect any residual upstream references anywhere in the manifest text.
-const residual = JSON.stringify(pkg).match(new RegExp(`${UPSTREAM_ORG}/`, 'g')) || [];
-
-if (checkOnly) {
-	if (residual.length) {
-		console.log(`[rewrite] ${repoDir}: ${residual.length} residual ${UPSTREAM_ORG}/ reference(s) remain`);
-		process.exit(1);
+// Pure transform over a package.json string. Returns { text, changes, residual }.
+export function rewritePackageJson(raw) {
+	const pkg = JSON.parse(raw);
+	const changes = [];
+	for (const field of [
+		'dependencies',
+		'devDependencies',
+		'optionalDependencies',
+		'peerDependencies',
+		'overrides',
+		'resolutions',
+	]) {
+		rewriteBlock(pkg[field], `${field}.`, changes);
 	}
-	console.log(`[rewrite] ${repoDir}: clean (no ${UPSTREAM_ORG}/ references)`);
-	process.exit(0);
+	// Residual count is scoped to dependency-ish fields only; top-level metadata
+	// (homepage, repository, bugs) intentionally still points at upstream and is
+	// handled separately in the independence pass.
+	const depText = JSON.stringify({
+		dependencies: pkg.dependencies,
+		devDependencies: pkg.devDependencies,
+		optionalDependencies: pkg.optionalDependencies,
+		peerDependencies: pkg.peerDependencies,
+		overrides: pkg.overrides,
+		resolutions: pkg.resolutions,
+	});
+	const residual = (depText.match(new RegExp(`${UPSTREAM_ORG}/`, 'gi')) || []).length;
+	const text = JSON.stringify(pkg, null, 2) + (raw.endsWith('\n') ? '\n' : '');
+	return { text, changes, residual };
 }
 
-if (!changes.length) {
-	console.log(`[rewrite] ${repoDir}: nothing to change`);
-	process.exit(0);
+// ---- CLI (operate on a local checkout) ----
+function main() {
+	const args = process.argv.slice(2);
+	const checkOnly = args.includes('--check');
+	const repoDir = args.find((a) => !a.startsWith('--')) || process.cwd();
+	const pkgPath = join(repoDir, 'package.json');
+
+	let raw;
+	try {
+		raw = readFileSync(pkgPath, 'utf8');
+	} catch {
+		console.log(`[rewrite] no package.json at ${pkgPath} — skipping`);
+		return;
+	}
+
+	const { text, changes, residual } = rewritePackageJson(raw);
+
+	if (checkOnly) {
+		if (residual) {
+			console.log(`[rewrite] ${repoDir}: ${residual} residual ${UPSTREAM_ORG}/ reference(s) remain`);
+			process.exit(1);
+		}
+		console.log(`[rewrite] ${repoDir}: clean (no ${UPSTREAM_ORG}/ references)`);
+		return;
+	}
+
+	if (!changes.length) {
+		console.log(`[rewrite] ${repoDir}: nothing to change`);
+		return;
+	}
+
+	writeFileSync(pkgPath, text);
+	console.log(`[rewrite] ${repoDir}: rewrote ${changes.length} specifier(s):`);
+	for (const c of changes) console.log(`  ${c}`);
+	if (residual) {
+		console.log(`[rewrite] WARNING: ${residual} ${UPSTREAM_ORG}/ reference(s) still present`);
+	}
 }
 
-// Preserve trailing newline style.
-const out = JSON.stringify(pkg, null, 2) + (raw.endsWith('\n') ? '\n' : '');
-writeFileSync(pkgPath, out);
-console.log(`[rewrite] ${repoDir}: rewrote ${changes.length} specifier(s):`);
-for (const c of changes) console.log(`  ${c}`);
-if (residual.length) {
-	console.log(`[rewrite] WARNING: ${residual.length} ${UPSTREAM_ORG}/ reference(s) still present after rewrite`);
+// Only run the CLI when invoked directly (not when imported).
+if (import.meta.url === `file://${process.argv[1]}`) {
+	main();
 }
