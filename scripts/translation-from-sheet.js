@@ -2,6 +2,7 @@
 // node scripts/translation-from-sheet.js "(en)" src/lib/resources/localization/translation/language/en.json
 
 import { GOOGLE_SHEETS_KEY } from "./sheet-token.js";
+import { rebrandLangObject } from "./rebrand-brand-strings.js";
 
 // replace with your api key, if your a pm dev than just ask gsa for a key
 const KEY = GOOGLE_SHEETS_KEY;
@@ -42,6 +43,9 @@ fetch(`https://sheets.googleapis.com/v4/spreadsheets/114K0H8ZbAA5r0APKLbybgHDcEV
             timeZoneName: "long",
         })}`;
         const langObject = Object.fromEntries(cells.values);
+        // Rebrand PenguinMod -> PatternYard in pulled values (see rebrand-brand-strings.js).
+        const rebranded = rebrandLangObject(langObject);
+        Object.assign(langObject, rebranded);
         langObject["---_SHEET_TITLE"] = String(sheet.name);
         langObject["---_PULL_TIMESTAMP"] = String(Date.now());
         langObject["---_PULL_DATE"] = String(pullDate);
