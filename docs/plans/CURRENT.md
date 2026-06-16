@@ -15,15 +15,24 @@ valuable changes from upstreams over time.
 > as expected). This chat's git remote repointed to
 > `patternyard/PatternYard-Home`. Remaining: §3 upstream-merge process is
 > ongoing/as-needed; §0b runtime-CDN gaps still open (see backend memory).
+> **2026-06-15 source-of-truth fix:** `scripts/stack-manifest.mjs` was stale
+> (old `PenguinMod-*` names, `FORK_OWNER=wycats`, 4 repos missing). It now
+> carries both `upstream` + renamed `repo` names, `FORK_OWNER=patternyard`, and
+> the 4 previously-missing repos (ApiModule, MarkDownNew, SvelteUI, Packager).
+> `rewrite-deps`/`fork-stack`/`fetch-backend` were updated to match and
+> regression-tested: rewriting the editor `develop` deps now exactly reproduces
+> the live deployed `wycats-main` deps (0 residual upstream refs).
 
 ---
 
 ## 0. Current state (what's already done)
 
-The entire PenguinMod stack is forked under the `wycats` GitHub user with **no
+The entire PenguinMod stack is forked under the `patternyard` GitHub org
+(repos renamed `PenguinMod-*` -> `PatternYard-*`) with **no
 build-time or runtime dependency on `PenguinMod/*`**. Verified 2026-06.
 
-**Forked repos (19) under `wycats`:**
+**Forked repos (19) under `patternyard`** (the table lists original upstream
+names; see `scripts/stack-manifest.mjs` for the live `upstream -> renamed-fork` map):
 
 | Role | Repo | Deployed? |
 |------|------|-----------|
@@ -54,7 +63,7 @@ build-time or runtime dependency on `PenguinMod/*`**. Verified 2026-06.
 - Backend `penguinmod-backend` = (backend project)
 
 **Wiring invariants** (don't break these during migration):
-- Every cross-repo git-dep is `github:wycats/<repo>#wycats-main` (except Home's
+- Every cross-repo git-dep is `github:patternyard/<renamed-fork>#wycats-main` (except Home's
   deps and the editor's, which pin specific refs — see each `package.json`).
 - Home → editor via `PUBLIC_STUDIO_URL=https://penguinmod-studio.vercel.app`
   (set as Vercel env on `penguinmod-frontend` AND committed in `.env.template`).

@@ -5,7 +5,7 @@
  * repos are large; cloning all of them in the sandbox is wasteful).
  *
  * For each stack repo it: reads package.json @ wycats-main, rewrites
- * github:PenguinMod/X#ref -> github:wycats/X#wycats-main, and commits the
+ * github:PenguinMod/X#ref -> github:patternyard/<renamed-fork>#wycats-main, and commits the
  * result back to wycats-main when changed.
  *
  * Token: prefers `gh auth token` (the sandbox's capable, fork/commit-able

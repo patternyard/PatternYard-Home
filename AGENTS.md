@@ -4,7 +4,7 @@ Guidance for AI agents and developers working in this repository.
 
 ## What this repo is
 
-`PenguinMod-HomeNew` — the PenguinMod home/landing **frontend**.
+`PatternYard-Home` — the PatternYard home/landing **frontend**.
 
 - **Framework:** SvelteKit 2 + Svelte 5 (runes) + Vite 6
 - **Adapter:** `@sveltejs/adapter-vercel` (deploys to Vercel)
@@ -17,7 +17,7 @@ Routes live in `src/routes`, shared UI/util code in `src/lib`, static assets in 
 
 The API is a separate Express app, **not** part of this repo's build:
 
-- **Source:** `github.com/wycats/PenguinMod-BackendApi`
+- **Source:** `github.com/patternyard/PatternYard-BackendApi`
 - **Deployed:** `https://penguinmod-backend.vercel.app`
 - **Live production API (default target):** `https://projects.penguinmod.com`
 

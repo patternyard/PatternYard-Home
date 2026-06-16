@@ -105,12 +105,12 @@ function ensureWorkBranch(repo, base) {
 async function main() {
 	console.log(`[fork] forking ${TO_FORK.length} repos ${UPSTREAM_ORG} -> ${FORK_OWNER}\n`);
 	const summary = [];
-	for (const { repo, base } of TO_FORK) {
+	for (const { upstream, repo, base } of TO_FORK) {
 		if (repoExists(FORK_OWNER, repo)) {
 			console.log(`[fork] ${repo}: already forked`);
 		} else {
 			console.log(`[fork] ${repo}: forking...`);
-			const res = gh(['repo', 'fork', `${UPSTREAM_ORG}/${repo}`, '--clone=false']);
+			const res = gh(['repo', 'fork', `${UPSTREAM_ORG}/${upstream}`, '--clone=false']);
 			if (!res.ok) {
 				console.log(`[fork] ${repo}: FORK FAILED — ${res.err}`);
 				summary.push({ repo, fork: 'FAILED', branch: '-' });

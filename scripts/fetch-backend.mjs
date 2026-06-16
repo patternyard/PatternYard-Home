@@ -18,7 +18,7 @@ import { execSync, spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-const BACKEND_REPO = process.env.BACKEND_REPO || 'wycats/PenguinMod-BackendApi';
+const BACKEND_REPO = process.env.BACKEND_REPO || 'patternyard/PatternYard-BackendApi';
 const TARGET_DIR = process.env.BACKEND_DIR || '.backend';
 
 // Skip in production / CI / Vercel build — those use the deployed backend.
