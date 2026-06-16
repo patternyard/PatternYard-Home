@@ -55,7 +55,7 @@
                 <!-- TODO: Logged out only -->
                 <img
                     src="https://penguinmod.com/penguins/frontpage.svg"
-                    alt="PenguinMod"
+                    alt="PatternYard"
                 />
             </div>
         </div>
@@ -66,7 +66,7 @@
             <div style="width:4px;"></div>
             <p>
                 <LocalizedString
-                    text="PenguinMod is made by English-speaking developers. Expect minor issues and sorry for any translation errors."
+                    text="PatternYard is made by English-speaking developers. Expect minor issues and sorry for any translation errors."
                     key="translation.warning"
                 />
             </p>
@@ -107,7 +107,7 @@
     <div class="section-footer">
         <p style="margin-block-end: 2px;">
             <LocalizedString
-                text="PenguinMod is not affiliated with Scratch, TurboWarp, the Scratch Team, or the Scratch Foundation."
+                text="PatternYard is not affiliated with Scratch, TurboWarp, the Scratch Team, or the Scratch Foundation."
                 key="home.footer.notaffiliated"
             />
         </p>
@@ -221,7 +221,7 @@
                     />
                 </p>
                 <a href={"/support"}>
-                    PenguinMod
+                    PatternYard
                 </a>
                 <a href={externalLinks.scratch}>
                     Scratch
