@@ -15,7 +15,7 @@
 	"dependencies": {
 		"penguinmod": "github:patternyard/PatternYard-ApiModule#wycats-main",
 		"PenguinMod-MarkDown": "github:patternyard/PatternYard-MarkDownNew#wycats-main",
-		"PenguinMod-SvelteUI": "github:patternyard/PatternYard-SvelteUI#wycats-main"
+		"patternyard-svelteui": "github:patternyard/PatternYard-SvelteUI#wycats-main"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-vercel": "^5.10.2",

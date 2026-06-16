@@ -1,6 +1,6 @@
 <script>
     // components
-    import { Button } from "PenguinMod-SvelteUI";
+    import { Button } from "patternyard-svelteui";
     import Icon from "$lib/components/Icon/Component.svelte";
     import LocalizedString from "$lib/components/Localization/LocalizedString.svelte";
     

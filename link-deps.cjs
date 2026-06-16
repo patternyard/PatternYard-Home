@@ -8,7 +8,7 @@ const path = require("path");
 // CONFIG
 const pathPenguinModApiModule = "C:/Users/Jeremy/Documents/Projects/PenguinMod/PenguinMod-ApiModule";
 const pathPenguinModMarkDownNew = "C:/Users/Jeremy/Documents/Projects/PenguinMod/PenguinMod-MarkDownNew";
-const pathPenguinModSvelteUI = "C:/Users/Jeremy/Documents/Projects/PenguinMod/PenguinMod-SvelteUI";
+const pathPenguinModSvelteUI = "C:/Users/Jeremy/Documents/Projects/PatternYard/PatternYard-SvelteUI";
 const nodeModulesPathPenguinModApiModule = path.join(__dirname, "node_modules/penguinmod");
 const nodeModulesPathPenguinModMarkDownNew = path.join(__dirname, "node_modules/PenguinMod-MarkDown");
 const nodeModulesPathPenguinModSvelteUI = path.join(__dirname, "node_modules/PenguinMod-SvelteUI");
