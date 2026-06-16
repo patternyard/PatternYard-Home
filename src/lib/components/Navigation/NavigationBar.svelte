@@ -46,7 +46,7 @@
             <img
                 class="navigation-logo-image"
                 src="/favicon.svg"
-                alt="PenguinMod"
+                alt="PatternYard"
             />
         </a>
 
