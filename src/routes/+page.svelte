@@ -54,7 +54,7 @@
                 ></iframe> -->
                 <!-- TODO: Logged out only -->
                 <img
-                    src="https://penguinmod.com/penguins/frontpage.svg"
+                    src="/penguins/frontpage.svg"
                     alt="PatternYard"
                 />
             </div>

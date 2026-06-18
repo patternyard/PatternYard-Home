@@ -28,11 +28,11 @@ if (browser) {
             ...(saved ?? {}),
         });
 
-        document.dispatchEvent(new CustomEvent("penguinmod-store-settings-updated"));
+        document.dispatchEvent(new CustomEvent("patternyard-store-settings-updated"));
     }
     settings.subscribe((value) => {
         localStorage.setItem('pm:settings', JSON.stringify(value));
-        document.dispatchEvent(new CustomEvent("penguinmod-store-settings-updated"));
+        document.dispatchEvent(new CustomEvent("patternyard-store-settings-updated"));
     });
 }
 

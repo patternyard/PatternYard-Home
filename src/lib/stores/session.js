@@ -35,11 +35,11 @@ if (browser) {
             ...(saved ?? {}),
         });
 
-        document.dispatchEvent(new CustomEvent("penguinmod-store-session-updated"));
+        document.dispatchEvent(new CustomEvent("patternyard-store-session-updated"));
     }
     session.subscribe((value) => {
         sessionStorage.setItem('pm:session', JSON.stringify(value));
-        document.dispatchEvent(new CustomEvent("penguinmod-store-session-updated"));
+        document.dispatchEvent(new CustomEvent("patternyard-store-session-updated"));
     });
 }
 
