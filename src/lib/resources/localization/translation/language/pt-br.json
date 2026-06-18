@@ -893,7 +893,7 @@
     "account.fields.username.ratelimit.days": "Aguarde {{DAYS}} dias antes de alterar seu nome de usuário novamente.",
     "login.linkto.forgot": "Esqueceu sua senha? Redefina-a aqui.",
     "login.linkto.oldaccounts2025.line1": "Devido a problemas no servidor, contas e projetos criados entre novembro de 2024 e janeiro de 2025 foram excluídos.",
-    "login.linkto.oldaccounts2025.line2": "Confira a postagem [aqui](https://penguinmod.com/devposts/3-18-2025-shutdown-incident) para mais informações.",
+    "login.linkto.oldaccounts2025.line2": "Confira a postagem [aqui](https://patternyard.dev/devposts/3-18-2025-shutdown-incident) para mais informações.",
     "event.status.upcoming": "Este é um evento futuro. Aguarde até a data do evento para participar.",
     "event.status.active": "Este evento começou!",
     "event.status.ended": "Este evento já terminou. Obrigado a todos que participaram!",

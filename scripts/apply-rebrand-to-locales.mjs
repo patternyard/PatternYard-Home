@@ -10,7 +10,10 @@ const here = dirname(fileURLToPath(import.meta.url));
 const langDir = join(here, '..', 'src/lib/resources/localization/translation/language');
 const files = readdirSync(langDir).filter((f) => f.endsWith('.json'));
 
-let totalFiles = 0, totalChanges = 0;
+const countBrand = (s) => (s.match(/(?<!\/)PenguinMod/g) || []).length;
+const countHost = (s) => (s.match(/penguinmod\.com/gi) || []).length;
+
+let totalFiles = 0, totalBrand = 0, totalHost = 0;
 for (const f of files) {
     const path = join(langDir, f);
     const obj = JSON.parse(readFileSync(path, 'utf8'));
@@ -18,11 +21,12 @@ for (const f of files) {
     const out = rebrandLangObject(obj);
     const after = JSON.stringify(out);
     if (before !== after) {
-        // count brand replacements for reporting
-        const n = (before.match(/(?<!\/)PenguinMod/g) || []).length - (after.match(/(?<!\/)PenguinMod/g) || []).length;
+        // count brand + host replacements separately for reporting
+        const brand = countBrand(before) - countBrand(after);
+        const host = countHost(before) - countHost(after);
         writeFileSync(path, JSON.stringify(out, null, 4) + '\n');
-        totalFiles++; totalChanges += n;
-        console.log(`  ${f}: ${n} brand string(s) rebranded`);
+        totalFiles++; totalBrand += brand; totalHost += host;
+        console.log(`  ${f}: ${brand} brand, ${host} host`);
     }
 }
-console.log(`\nDone: ${totalChanges} brand strings across ${totalFiles}/${files.length} locale files.`);
+console.log(`\nDone: ${totalBrand} brand strings + ${totalHost} upstream hosts rewritten across ${totalFiles}/${files.length} locale files.`);
