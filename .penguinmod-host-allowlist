@@ -1,0 +1,16 @@
+# Files exempt from the "no upstream hosts" CI guard.
+# gitignore-style path globs, one per line. Only tooling that intentionally
+# references the upstream host in order to REWRITE it, migration provenance, and
+# documentation belong here. Application/runtime code must NEVER be allowlisted.
+
+# Rebrand pipeline: HOST_MAP intentionally contains upstream hosts as the keys it
+# rewrites to patternyard.dev on every Google Sheet pull.
+scripts/rebrand-brand-strings.js
+
+# Fork-automation manifest: records penguinmod.github.io as upstream PROVENANCE /
+# the matching key for the dependency rewriter. Not a runtime host.
+scripts/stack-manifest.mjs
+
+# Documentation legitimately names the upstream project and its hosts when
+# explaining the migration (incl. the migration plan and self-hosting notes).
+**/*.md

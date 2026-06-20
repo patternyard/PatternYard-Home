@@ -30,9 +30,9 @@ export default {
     packager: `${PUBLIC_STUDIO_URL}/PenguinMod-Packager/`,
 
     /**
-     * PenguinMod's official wiki
+     * PatternYard's documentation site (equivalent of the upstream wiki)
      */
-    wiki: "https://wiki.penguinmod.com/wiki/Main_Page",
+    wiki: "https://docs.patternyard.dev",
 
     /**
      * PenguinMod's Discord invite
@@ -50,12 +50,12 @@ export default {
     turbowarp: "https://turbowarp.org",
 
     /**
-     * PenguinMod's github page
+     * PatternYard's github org
      */
-    github: "https://github.com/PenguinMod/",
+    github: "https://github.com/patternyard/",
 
     /**
-     * PenguinMod's issues page
+     * PatternYard's issues page
      */
-    issues: "https://github.com/PenguinMod/PenguinMod-Home/issues",
+    issues: "https://github.com/patternyard/PatternYard-Home/issues",
 }

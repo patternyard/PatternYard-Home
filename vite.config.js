@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
 	// the frontend can exercise the real API same-origin (no CORS, cookies work).
 	// Set BACKEND_PROXY_TARGET=http://localhost:8080 to test a locally-running
 	// backend instead (that needs the backend's own secrets/DB to boot).
-	const backendTarget = env.BACKEND_PROXY_TARGET || 'https://penguinmod-backend.vercel.app';
+	const backendTarget = env.BACKEND_PROXY_TARGET || 'https://api.patternyard.dev';
 
 	return {
 		plugins: [sveltekit()],

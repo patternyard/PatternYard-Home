@@ -191,7 +191,7 @@
     "uploading.guidelines.button": "Publication de Projets & Améliorations Guidelines",
     "uploading.guidelines.newtab": "Ouvrir dans un nouvel onglet",
     "uploading.guidelines.darkmode": "La page n'est pas en mode sombre car il s'agit d'un site web externe.",
-    "uploading.guidelines.nottranslated": "Il est possible que les guidelines ne soient pas traduites. Pour une alternative traduite, <a href=\"https://studio.penguinmod.com/PenguinMod-Guidelines/PROJECTS\">regarde ici</a>.",
+    "uploading.guidelines.nottranslated": "Il est possible que les guidelines ne soient pas traduites. Pour une alternative traduite, <a href=\"https://studio.patternyard.dev/PenguinMod-Guidelines/PROJECTS\">regarde ici</a>.",
     "uploading.error.toomanyrequests": "Tu ne peux publier des projets que toutes les huit minutes.",
     "uploading.error.missingprojectdata": "Impossible d'envoyer ton projet. Il doit être trop lourd ! Essaie de supprimer certains éléments, tels que des images ou de la musique.",
     "uploading.error.reauthenticate": "Tu as été déconnecté. Tu dois te reconnecter pour continuer à utiliser ton compte.",
