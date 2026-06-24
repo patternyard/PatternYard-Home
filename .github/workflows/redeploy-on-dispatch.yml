@@ -1,0 +1,41 @@
+# Rebuilds + redeploys the patternyard-home Vercel project when an upstream engine
+# repo (Vm / Render / Paint / Parser, etc.) fires a repository_dispatch.
+#
+# Home pulls several deps straight from GitHub branches (github:patternyard/...#wycats-main)
+# and embeds the editor, so it must redeploy to pick up those changes. The patternyard-home
+# project deploys via Vercel's git integration, so we trigger a fresh deploy by POSTing to a
+# Vercel Deploy Hook.
+#
+# Required secret:
+#   VERCEL_DEPLOY_HOOK - a Vercel Deploy Hook URL for the patternyard-home project.
+#     Create at: Vercel > patternyard-home > Settings > Git > Deploy Hooks
+#     (name it e.g. "dispatch", branch "main"), then add the generated URL as a repo
+#     secret named VERCEL_DEPLOY_HOOK.
+name: Redeploy on dispatch
+
+on:
+  repository_dispatch:
+    types: [update]
+  workflow_dispatch:
+
+# This workflow only POSTs to a deploy hook; it does not need repository access.
+permissions: {}
+
+jobs:
+  redeploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Trigger Vercel deploy hook
+        run: |
+          if [ -z "${{ secrets.VERCEL_DEPLOY_HOOK }}" ]; then
+            echo "::error::VERCEL_DEPLOY_HOOK secret is not set. See workflow header for setup."
+            exit 1
+          fi
+          curl --fail --silent --show-error \
+            --connect-timeout 10 \
+            --max-time 30 \
+            --retry 2 \
+            --retry-all-errors \
+            -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}" \
+            && echo "Deploy hook triggered."

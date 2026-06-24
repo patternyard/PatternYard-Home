@@ -1,0 +1,11 @@
+{
+  "name": "PatternYard CD Dispatch",
+  "description": "Mints short-lived, least-privilege tokens so engine repos (Vm/Render/Paint/Parser) can trigger cross-repo rebuilds of PatternYard-Home and PatternYard-Packager. Replaces a long-lived personal access token.",
+  "url": "https://patternyard.dev",
+  "public": false,
+  "default_permissions": {
+    "contents": "write",
+    "metadata": "read"
+  },
+  "default_events": []
+}
